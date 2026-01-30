@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – INSURE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            font-family: var(--font-sans);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title p {
+            color: #64748b;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-logout {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            border-radius: 8px;
+            color: #475569;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-logout:hover {
+            background: #f8fafc;
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card-title {
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        /* Data Platform */
+        .data-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-toolbar h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        td {
+            padding: 20px 24px;
+            color: #334155;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* Badges & Text Styles */
+        .text-primary {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .text-secondary {
+            color: #64748b;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .badge-vehicle {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-date {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        .loading-state,
+        .empty-state {
+            padding: 60px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .header-title h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body style="visibility:hidden; opacity: 0; transition: opacity 0.3s ease;" id="page">
+
+    <div class="dashboard-container">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-title">
+                <h1>Admin Dashboard</h1>
+                <p>Manage and review incoming insurance applications.</p>
+            </div>
+            <button onclick="logout()" class="btn-logout">
+                Sign Out
+            </button>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-title">Total Applications</div>
+                <div class="stat-card-value" id="totalApps">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Cars</div>
+                <div class="stat-card-value" id="totalCars">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-title">Bikes</div>
+                <div class="stat-card-value" id="totalBikes">-</div>
+            </div>
+        </div>
+
+        <!-- Main Data Table -->
+        <div class="data-card">
+            <div class="table-toolbar">
+                <h2>Recent Applications</h2>
+                <div>
+                    <!-- Could add filters/search here -->
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Applicant</th>
+                            <th>Contact Info</th>
+                            <th>Vehicle Details</th>
+                            <th>Registration</th>
+                            <th>Submission Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+                        <tr>
+                            <td colspan="5" class="loading-state">
+                                Loading application data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* =========================
+           AUTH & DATA LOADING
+        ========================= */
+        const AUTH_URL = "https://vehical-insurance-backend.onrender.com/admin/check";
+        const DATA_URL = "https://vehical-insurance-backend.onrender.com/admin/data";
+        const LOGOUT_URL = "https://vehical-insurance-backend.onrender.com/admin/logout";
+        const LOGIN_PAGE = "admin-login.html";
+
+        // Initial Access Check
+        (async () => {
+            try {
+                // Add Authorization header
+                const headers = {};
+                const token = localStorage.getItem("adminToken");
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const res = await fetch(AUTH_URL, {
+                    credentials: "include",
+                    headers: headers
+                });
+
+                if (!res.ok) throw new Error("Unauthorized");
+
+                // Show Page
+                const page = document.getElementById("page");
+                page.style.visibility = "visible";
+                page.style.opacity = "1";
+
+                // Load Data
+                loadData();
+
+            } catch (err) {
+                window.location.replace(LOGIN_PAGE);
+            }
+        })();
+
+        async function loadData() {
+            try {
+                // Add Authorization header
+                const headers = {};
+                const token = localStorage.getItem("adminToken");
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const res = await fetch(DATA_URL, {
+                    credentials: "include",
+                    headers: headers
+                });
+
+                if (!res.ok) throw new Error("Failed to load data");
+
+                const rows = await res.json();
+                renderTable(rows);
+                updateStats(rows);
+
+            } catch (err) {
+                document.getElementById("data").innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-state" style="color:#ef4444;">
+                    Unable to load data. Please check server connection.
+                </td>
+            </tr>
+        `;
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById("data");
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-state">
+                    No applications submitted yet.
+                </td>
+            </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+        <tr>
+            <td>
+                <div class="text-primary">${item.name}</div>
+                <div class="text-secondary" style="font-size:0.85rem; margin-top:2px;">ID: #${item.id || item._id.slice(-6)}</div>
+            </td>
+            <td>
+                <div class="text-primary">${item.email}</div>
+                <div class="text-secondary">${item.phone}</div>
+            </td>
+            <td>
+                <span class="badge badge-vehicle">${item.vehicle_type}</span>
+                <div style="margin-top:6px; font-weight:500;">
+                    ${item.make} ${item.model} (${item.year})
+                </div>
+            </td>
+            <td>
+                <div style="font-family:monospace; font-size:1rem; color:#475569;">
+                    ${item.registration_number || 'N/A'}
+                </div>
+            </td>
+            <td>
+                <div class="text-secondary">
+                    ${new Date(item.created_at).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            })}
+                </div>
+                <div style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">
+                    ${new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+        }
+
+        function updateStats(data) {
+            document.getElementById("totalApps").textContent = data.length;
+            document.getElementById("totalCars").textContent = data.filter(i => i.vehicle_type === 'Car').length;
+            document.getElementById("totalBikes").textContent = data.filter(i => i.vehicle_type === 'Bike').length;
+        }
+
+        async function logout() {
+            try {
+                await fetch(LOGOUT_URL, { credentials: "include" });
+            } catch (e) { }
+
+            // Clear token
+            localStorage.removeItem("adminToken");
+            window.location.replace(LOGIN_PAGE);
+        }
+    </script>
+
+</body>
+
+</html>

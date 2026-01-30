@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login – INSURE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <main class="grid-section grey-bg">
+        <div class="container">
+            <h2 class="section-title">Admin Login</h2>
+
+            <form class="card" id="adminLoginForm" style="max-width:400px;margin:auto;">
+                <div style="margin-bottom:15px;">
+                    <label>Username</label>
+                    <input type="text" required id="username" style="width:100%;padding:10px;" value="admin">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label>Password</label>
+                    <input type="password" required id="password" style="width:100%;padding:10px;" value="admin123">
+                </div>
+
+                <button class="btn-cta" type="submit" style="width:100%;">
+                    Login
+                </button>
+
+                <div id="errorMessage" style="margin-top:15px;color:red;display:none;"></div>
+                <div id="debugInfo" style="margin-top:15px;font-size:12px;color:#666;"></div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const errorDiv = document.getElementById("errorMessage");
+        const debugDiv = document.getElementById("debugInfo");
+
+        document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            errorDiv.style.display = "none";
+            debugDiv.textContent = "Attempting login...";
+
+            console.log("🔐 Attempting login with:", { username, password });
+
+            try {
+                const url = "https://vehical-insurance-backend.onrender.com/admin/login";
+                debugDiv.textContent = `Sending request to ${url}...`;
+
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, password })
+                });
+
+                console.log("📥 Response status:", res.status);
+                const data = await res.json();
+                console.log("📥 Response data:", data);
+
+                if (res.ok && data.success) {
+                    debugDiv.textContent = "Login successful! Redirecting...";
+
+                    // ✅ Store Token (Fix for file:// protocol)
+                    if (data.token) {
+                        localStorage.setItem("adminToken", data.token);
+                    }
+
+                    console.log("✅ Login successful, redirecting to admin.html");
+
+                    setTimeout(() => {
+                        window.location.replace("admin.html");
+                    }, 500);
+                } else {
+                    errorDiv.style.display = "block";
+                    errorDiv.textContent = data.message || "Invalid admin credentials";
+                    debugDiv.textContent = `Login failed: ${res.status}`;
+                    console.error("❌ Login failed:", data);
+                }
+            } catch (err) {
+                console.error("❌ Error:", err);
+                errorDiv.style.display = "block";
+                errorDiv.textContent = "Server not running. Please start backend first.";
+                debugDiv.textContent = `Error: ${err.message}`;
+            }
+        });
+
+        // Check server connection on page load
+        window.addEventListener("DOMContentLoaded", async () => {
+            // If we have a token, we might already be logged in
+            if (localStorage.getItem("adminToken")) {
+                debugDiv.textContent = "✅ Found local session | checking...";
+            }
+
+            try {
+                const headers = {};
+                const token = localStorage.getItem("adminToken");
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const res = await fetch("https://vehical-insurance-backend.onrender.com/admin/check", {
+                    credentials: "include",
+                    headers: headers
+                });
+
+                if (res.ok) {
+                    debugDiv.textContent = "✅ Server connected | Already logged in? Checking...";
+                    window.location.replace("admin.html");
+                } else {
+                    debugDiv.textContent = "✅ Server connected | Ready to login";
+                }
+            } catch (err) {
+                debugDiv.textContent = "❌ Cannot connect to server at https://vehical-insurance-backend.onrender.com";
+                debugDiv.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

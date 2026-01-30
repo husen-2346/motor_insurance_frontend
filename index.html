@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vehicle Insurance Portal</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <nav class="navbar" aria-label="Main navigation">
+                <a href="index.html" class="logo">
+                    <div class="logo-box"></div>
+                    <span>INSURE</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#apply">Apply</a></li>
+                    <li><a href="claims.html">Claims</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="admin-login.html">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>
+                    Protect Your Vehicle<br />
+                    <span class="highlight">Fast. Simple. Reliable.</span>
+                </h1>
+                <p class="hero-subtext">
+                    Apply for vehicle insurance in minutes with a simple form.
+                </p>
+
+                <a href="#apply" class="btn-cta">Apply for Insurance</a>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section class="grid-section white-bg">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+
+                <div class="grid-container">
+                    <article class="card info-card">
+                        <div class="icon-circle">1</div>
+                        <h3>Enter Details</h3>
+                        <p>Provide your personal and vehicle information.</p>
+                    </article>
+
+                    <article class="card info-card">
+                        <div class="icon-circle">2</div>
+                        <h3>Submit Application</h3>
+                        <p>Your details are securely sent for review.</p>
+                    </article>
+
+                    <article class="card info-card">
+                        <div class="icon-circle">3</div>
+                        <h3>Admin Review</h3>
+                        <p>Our team reviews and processes your request.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- APPLY FORM -->
+        <section id="apply" class="grid-section grey-bg">
+            <div class="container">
+                <h2 class="section-title">Insurance Application</h2>
+
+                <form class="card form-grid" id="insuranceForm">
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" placeholder="Your full name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" placeholder="10-digit phone number" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="you@example.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vehicle Type</label>
+                        <select name="vehicle_type" required>
+                            <option value="">Select</option>
+                            <option value="Car">Car</option>
+                            <option value="Bike">Bike</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vehicle Make</label>
+                        <input type="text" name="make" placeholder="e.g. Toyota" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vehicle Model</label>
+                        <input type="text" name="model" placeholder="e.g. Corolla" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Manufacturing Year</label>
+                        <input type="number" name="year" placeholder="e.g. 2021" min="1900" max="2026" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Registration Number</label>
+                        <input type="text" name="registration" placeholder="e.g. KA01AB1234" required />
+                    </div>
+
+                    <button type="submit" class="btn-primary">Submit Application</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- INSURANCE TYPES -->
+        <section class="grid-section white-bg">
+            <div class="container">
+                <h2 class="section-title">Insurance Types</h2>
+
+                <div class="grid-container">
+                    <article class="card">
+                        <div class="icon-circle">🚗</div>
+                        <h3>Car Insurance</h3>
+                        <p>Coverage for private vehicles.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="icon-circle">🏍️</div>
+                        <h3>Bike Insurance</h3>
+                        <p>Affordable plans for two-wheelers.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="icon-circle">🚛</div>
+                        <h3>Commercial</h3>
+                        <p>Insurance for business vehicles.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL -->
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">What Our Customers Say</h2>
+
+                <blockquote class="testimonial-box">
+                    <p>
+                        "Very smooth process and quick support.
+                        Highly recommended!"
+                    </p>
+                    <footer class="user-name">— Happy Customer</footer>
+                </blockquote>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div>
+                <strong>INSURE</strong>
+                <p class="footer-text">
+                    Trusted vehicle insurance made simple.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
