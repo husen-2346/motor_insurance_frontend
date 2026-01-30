@@ -110,7 +110,7 @@ function initFormSubmission() {
             }
         } catch (error) {
             console.error("❌ Submission error:", error);
-            alert("❌ Failed to submit application. Please try again.\n\nMake sure the server is running on port 5000.");
+            alert("❌ Failed to submit application. Please try again.");
         } finally {
             // Re-enable submit button
             submitBtn.disabled = false;

@@ -11,12 +11,13 @@ const PORT = 5000;
 ========================= */
 // ✅ FIXED: Allow multiple origins (localhost and 127.0.0.1, multiple ports)
 app.use(cors({
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
         // Allow requests with no origin (like Postman, curl, or mobile apps)
         if (!origin) return callback(null, true);
-        
-        // Allow any localhost or 127.0.0.1 on ports 5500-5510
+
+        // Allow any localhost or 127.0.0.1 on ports 5500-5510, plus the deployed frontend
         const allowedOrigins = [
+            'https://motor-insurance-4sk1.onrender.com', // Deployed Frontend
             'http://localhost:5500',
             'http://127.0.0.1:5500',
             'http://localhost:5501',
@@ -26,7 +27,7 @@ app.use(cors({
             'http://localhost:5503',
             'http://127.0.0.1:5503',
         ];
-        
+
         if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
@@ -104,7 +105,7 @@ function requireAdmin(req, res, next) {
 ========================= */
 app.post("/apply", (req, res) => {
     console.log('📝 Application submission received:', req.body);
-    
+
     const {
         name, phone, email,
         vehicle_type, make, model, year, registration_number
@@ -113,9 +114,9 @@ app.post("/apply", (req, res) => {
     // Validation
     if (!name || !phone || !email || !vehicle_type || !make || !model || !year) {
         console.log('❌ Validation failed - missing required fields');
-        return res.status(400).json({ 
-            success: false, 
-            message: "All fields except registration number are required" 
+        return res.status(400).json({
+            success: false,
+            message: "All fields except registration number are required"
         });
     }
 
@@ -124,19 +125,19 @@ app.post("/apply", (req, res) => {
          (name, phone, email, vehicle_type, make, model, year, registration_number)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [name, phone, email, vehicle_type, make, model, year, registration_number || null],
-        function(err) {
+        function (err) {
             if (err) {
                 console.error("❌ Database error:", err);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: "Database error" 
+                return res.status(500).json({
+                    success: false,
+                    message: "Database error"
                 });
             }
-            
+
             console.log(`✅ New application submitted - ID: ${this.lastID}, Name: ${name}`);
-            res.json({ 
-                success: true, 
-                id: this.lastID 
+            res.json({
+                success: true,
+                id: this.lastID
             });
         }
     );
@@ -147,14 +148,14 @@ app.post("/apply", (req, res) => {
 ========================= */
 app.post("/admin/login", (req, res) => {
     console.log('🔐 Login attempt:', { username: req.body.username });
-    
+
     const { username, password } = req.body;
 
     if (!username || !password) {
         console.log('❌ Login failed: Missing credentials');
-        return res.status(400).json({ 
-            success: false, 
-            message: "Username and password required" 
+        return res.status(400).json({
+            success: false,
+            message: "Username and password required"
         });
     }
 
@@ -164,17 +165,17 @@ app.post("/admin/login", (req, res) => {
         (err, row) => {
             if (err) {
                 console.error("❌ Database error:", err);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: "Server error" 
+                return res.status(500).json({
+                    success: false,
+                    message: "Server error"
                 });
             }
 
             if (!row) {
                 console.log('❌ Login failed: Invalid credentials');
-                return res.status(401).json({ 
-                    success: false, 
-                    message: "Invalid credentials" 
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid credentials"
                 });
             }
 
@@ -191,7 +192,7 @@ app.post("/admin/login", (req, res) => {
 app.get("/admin/check", (req, res) => {
     const isAuth = req.session.admin ? true : false;
     console.log('🔍 Session check:', isAuth ? 'Authenticated ✅' : 'Not authenticated ❌');
-    
+
     if (isAuth) {
         res.sendStatus(200);
     } else {
@@ -221,12 +222,12 @@ app.get("/admin/data", requireAdmin, (req, res) => {
         (err, rows) => {
             if (err) {
                 console.error("❌ Database error:", err);
-                return res.status(500).json({ 
-                    success: false, 
-                    message: "Database error" 
+                return res.status(500).json({
+                    success: false,
+                    message: "Database error"
                 });
             }
-            
+
             console.log(`📊 Sending ${rows.length} applications to admin`);
             res.json(rows);
         }
@@ -247,3 +248,4 @@ app.listen(PORT, () => {
 ╚════════════════════════════════════════════╝
     `);
 });
+//
