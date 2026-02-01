@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like Postman, curl, or mobile apps)
-        if (!origin) return callback(null, true);
+        if (!origin || origin === "null") return callback(null, true);
 
         // Allow any origin that is a deployed Render app or Localhost
         if (origin.includes("onrender.com") || origin.includes("localhost") || origin.includes("127.0.0.1")) {
