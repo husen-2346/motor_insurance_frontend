@@ -50,7 +50,7 @@
             console.log("🔐 Attempting login with:", { username, password });
 
             try {
-                const url = "https://vehical-insurance-backend.onrender.com/admin/login";
+                const url = "https://vehical-insurance-backend-026c.onrender.com/admin/login";
                 debugDiv.textContent = `Sending request to ${url}...`;
 
                 const res = await fetch(url, {
@@ -103,7 +103,7 @@
                 const token = localStorage.getItem("adminToken");
                 if (token) headers['Authorization'] = `Bearer ${token}`;
 
-                const res = await fetch("https://vehical-insurance-backend.onrender.com/admin/check", {
+                const res = await fetch("https://vehical-insurance-backend-026c.onrender.com/admin/check", {
                     credentials: "include",
                     headers: headers
                 });
