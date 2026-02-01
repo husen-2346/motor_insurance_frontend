@@ -89,7 +89,7 @@ function initFormSubmission() {
         submitBtn.textContent = "Submitting...";
 
         try {
-            const response = await fetch("https://vehical-insurance-backend.onrender.com/apply", {
+            const response = await fetch("https://vehical-insurance-backend-026c.onrender.com/apply", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

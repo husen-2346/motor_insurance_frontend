@@ -15,25 +15,13 @@ app.use(cors({
         // Allow requests with no origin (like Postman, curl, or mobile apps)
         if (!origin) return callback(null, true);
 
-        // Allow any localhost or 127.0.0.1 on ports 5500-5510, plus the deployed frontend
-        const allowedOrigins = [
-            'https://motor-insurance-4sk1.onrender.com', // Deployed Frontend
-            'http://localhost:5500',
-            'http://127.0.0.1:5500',
-            'http://localhost:5501',
-            'http://127.0.0.1:5501',
-            'http://localhost:5502',
-            'http://127.0.0.1:5502',
-            'http://localhost:5503',
-            'http://127.0.0.1:5503',
-        ];
-
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log('⚠️  CORS blocked origin:', origin);
-            callback(new Error('Not allowed by CORS'));
+        // Allow any origin that is a deployed Render app or Localhost
+        if (origin.includes("onrender.com") || origin.includes("localhost") || origin.includes("127.0.0.1")) {
+            return callback(null, true);
         }
+
+        console.log('⚠️  CORS blocked origin:', origin);
+        callback(null, false); // Don't throw error, just deny
     },
     credentials: true
 }));
