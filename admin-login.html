@@ -115,7 +115,10 @@
                     debugDiv.textContent = "✅ Server connected | Ready to login";
                 }
             } catch (err) {
-                debugDiv.textContent = "❌ Cannot connect to server at https://vehical-insurance-backend-026c.onrender.com/admin/check";
+                console.error("❌ Connection check failed:", err);
+                debugDiv.innerHTML = `❌ Cannot connect to server.<br>
+                                     <small>${err.name}: ${err.message}</small><br>
+                                     <small>Ensure the backend is running and redeployed.</small>`;
                 debugDiv.style.color = "red";
             }
         });
